@@ -8,6 +8,7 @@ import { useState } from "react";
 import NavBar from "../components/navbar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Settings() {
   const session = useSession();
@@ -24,7 +25,7 @@ export default function Settings() {
           className="text-6xl w-full px-24 pb-24 pt-32 text-center"
           style={{ backgroundImage: "url(/landscape.jpg)", backgroundSize: "cover" }}
         >
-          Add your own photos!
+          Add your own photos! 📸
         </h1>
         <UploadButton
           endpoint="userPhotos"
@@ -45,6 +46,13 @@ export default function Settings() {
           </div>
         )}
         <hr className="w-[80%] my-5" />
+        <p className="">
+          Alternatively, choose your preferences manually{" "}
+          <Link className="text-[#30a2d3] underline" href="/preferences">
+            here
+          </Link>
+          .
+        </p>
       </main>
     </>
   );
