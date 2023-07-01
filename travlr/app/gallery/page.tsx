@@ -76,7 +76,7 @@ export default function Gallery() {
             <img
               key={url}
               src={url}
-              className="w-3/12 rounded-xl shadow-xl hover:scale-105 transition-all"
+              className="w-3/12 rounded-xl shadow-xl hover:scale-105 transition-all object-cover"
               onClick={() => deletePhoto(id)}
             />
           ))}
