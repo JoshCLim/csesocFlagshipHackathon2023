@@ -1,5 +1,22 @@
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
+from ultralytics import YOLO
+
+class YOLOv6:
+    '''
+    Using YOLOv6 to help us! 
+    '''
+    def __init__(self, model_type = "small"):
+        self.model = None
+        self.model_type = model_type
+        
+    def load_model(self):
+        self.model = YOLO("yolov6n.yaml")  # build new model from scratch
+        self.model.info()  # display model information
+    
+    def predict(self, img_path):
+        output = self.model.predict("img_path")
+        print(output)
 
 class ItemBasedCollaborativeFiltering:
     '''
