@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 export default function Settings() {
   const session = useSession();
   const router = useRouter();
-  if (session.status === "unauthenticated") router.push("/login");
+  if (session.status === "unauthenticated") router.push("/auth/login");
 
   const [lastImageUploaded, setLastImageUploaded] = useState<string | null>(null);
   return (
