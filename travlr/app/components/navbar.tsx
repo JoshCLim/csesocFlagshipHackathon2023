@@ -194,6 +194,4 @@ const NavLink = ({ url, label }: { url: string; label: string }) => {
   );
 };
 
-const NavIcon = () => {};
-
 export default NavBar;
