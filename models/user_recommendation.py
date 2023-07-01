@@ -30,6 +30,17 @@ def get_preferences():
     else:
         print("Error: Failed to retrieve user preferences.")
         return None
+    
+# def get_photos():
+#     url = "http://localhost:8000/photos"
+#     response = requests.get(url)
+#     print(response)
+#     if response.status_code == 200:
+#         preferences = response.json()
+#         return preferences
+#     else:
+#         print("Error: Failed to retrieve user preferences.")
+#         return None
 
 
 def data_ingestion():
@@ -44,20 +55,6 @@ def data_ingestion():
     return json_data
 
 
-# class UserBasedCollaborativeFiltering:
-#     def __init__(self, json_data):
-#         self.data = pd.read_json(json_data)
-#         # df = pd.read_json(json_data)
-#         # self.data = df.set_index("user_id")
-#         self.user_similarity = cosine_similarity(self.data)
-
-#     def get_similar_users(self, user_id, top_n=5):
-#         user_scores = list(enumerate(self.user_similarity[user_id]))
-#         user_scores = sorted(user_scores, key=lambda x: x[1], reverse=True)
-#         similar_users = [user for user, _ in user_scores[1:top_n+1]]
-
-#         return similar_users
-
 class UserBasedCollaborativeFiltering:
     def __init__(self, json_data):
         self.data = pd.read_json(json_data)
@@ -66,7 +63,6 @@ class UserBasedCollaborativeFiltering:
         # self.data = self.data.drop(["user_id"], axis = 1)
         # self.data_copy = pd.read_json(json_data)
         self.user_similarity = cosine_similarity(self.data)
-        print(self.user_similarity)
 
     def get_similar_users(self, user_id, top_n=5):
         user_idx = self.data.index.get_loc(user_id)
@@ -157,19 +153,17 @@ if __name__ == "__main__":
     data = data.drop(["id"], axis = 1)
     json_data = data.to_json()
     
-    # filtering = UserBasedCollaborativeFiltering(json_data)
-    # user_id = get_userid()
-    # similar_users = filtering.get_similar_users(user_id)
-    # counter = 1
-    # for person in similar_users:
-    #     print(f"The person who is {counter} similar has userid: {person}")
-    #     counter += 1
-
     cf = UserBasedCollaborativeFiltering(json_data)
     similar_users = cf.get_similar_users(user_id='4c6376e4-a587-4ce7-b588-6a94ab103685', top_n=5)
     counter = 1
     for person in similar_users:
         print(f"The person who is {counter} similar has userid: {person}")
         counter += 1
+    
+    photos = get_photos()
+    photos = json.dumps(photos)
+    photos = pd.read_json(photos)
+    # data = data.drop(["id"], axis = 1)
+    print(photos)
 
 
