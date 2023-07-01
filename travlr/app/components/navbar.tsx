@@ -3,7 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import api from "../api/route";
+import api from "../api/api";
 import useUser from "../hooks/useUser";
 
 const EMOJIS = [

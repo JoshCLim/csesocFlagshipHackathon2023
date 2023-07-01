@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import api from "../api/route";
+import api from "../api/api";
 
 interface User {
   bio: string;

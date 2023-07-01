@@ -2,7 +2,7 @@
 
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "@/app/api/route";
+import api from "@/app/api/api";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function LoginForm() {
