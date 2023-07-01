@@ -3,7 +3,6 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import api from "../api/api";
 import useUser from "../hooks/useUser";
 
 const EMOJIS = [
@@ -148,28 +147,12 @@ const EMOJIS = [
 const NavBar = () => {
   const { data: session } = useSession();
   const [emoji, setEmoji] = useState<string>("✈️");
-
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     if (!session) {
-  //       console.log("ahhh");
-  //       return null;
-  //     }
-  //     const user = await api.auth.getUser(session.user.email);
-  //     console.log(user);
-  //   };
-  //   getUserData();
-  // }, [session]);
   const user = useUser();
 
   useEffect(() => {
     const emojiInterval = setInterval(() => {
       setEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
     }, 1000);
-
-    // return () => {
-    //   clearInterval(emojiInterval);
-    // };
   }, []);
 
   return (
@@ -177,7 +160,9 @@ const NavBar = () => {
       <NavLink url="/" label={emoji} key="home" />
       <div className="flex flex-row items-center justify-center gap-3">
         {!session && <NavLink url="/auth/login" label="Login" key="login" />}
-        {!session && <NavLink url="/auth/register" label="Register" key="register" />}
+        {!session && (
+          <NavLink url="/auth/register" label="Register" key="register" />
+        )}
         {!!session && !!session.user && (
           <div className="flex flex-row items-center justify-center gap-3">
             <div className="text-[#71bfff] text-xl py-3 px-6 border-[1px] border-transparent font-semibold">
