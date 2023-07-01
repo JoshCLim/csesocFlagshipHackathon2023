@@ -1,22 +1,35 @@
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
-from ultralytics import YOLO
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision.transforms as transforms
+from torchvision import models
+from torch.utils.data import DataLoader, Dataset
+from PIL import Image
+from finetune import FineTunedModel
 
-class YOLOv6:
-    '''
-    Using the Object Detection Model YOLOv6 to help us get the detection results. 
-    '''
-    def __init__(self, model_type = "small"):
-        self.model = None
-        self.model_type = model_type
-        
-    def load_model(self):
-        self.model = YOLO("yolov6n.yaml")  # build new model from scratch
-        self.model.info()  # display model information
-    
-    def predict(self, img_path):
-        output = self.model.predict("img_path")
-        print(output)
+# def finetune_predict(num_classes = 9):
+#     transform = transforms.Compose([
+#         transforms.Resize((224, 224)),     # Resize to a common size
+#         transforms.ToTensor(),              # Convert to tensor
+#         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize the images
+#     ])
+#     model = FineTunedModel(num_classes)
+#     model.load_state_dict(torch.load('model.pth'))
+
+#     image = Image.open('./test/lunar_park.jpg').convert('RGB')
+#     image = transform(image)
+#     image = image.unsqueeze(0)  # Add an extra dimension for batch size
+
+#     # Make predictions
+#     with torch.no_grad():
+#         output = model(image)
+#         probabilities = torch.sigmoid(output)
+#         predicted_labels = (probabilities >= 0.5).squeeze().tolist()
+#     return predicted_labels
+
+# print(finetune_predict(num_classes=9))
 
 class ItemBasedCollaborativeFiltering:
     '''
