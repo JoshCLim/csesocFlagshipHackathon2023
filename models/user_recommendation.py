@@ -23,7 +23,8 @@ NUM_CLASSES = 11
 def get_preferences():
     url = "http://localhost:8000/preferences"
     response = requests.get(url)
-    if response.status_code == 201:
+    print(response)
+    if response.status_code == 200:
         preferences = response.json()
         return preferences
     else:
@@ -43,21 +44,43 @@ def data_ingestion():
     return json_data
 
 
+# class UserBasedCollaborativeFiltering:
+#     def __init__(self, json_data):
+#         self.data = pd.read_json(json_data)
+#         # df = pd.read_json(json_data)
+#         # self.data = df.set_index("user_id")
+#         self.user_similarity = cosine_similarity(self.data)
+
+#     def get_similar_users(self, user_id, top_n=5):
+#         user_scores = list(enumerate(self.user_similarity[user_id]))
+#         user_scores = sorted(user_scores, key=lambda x: x[1], reverse=True)
+#         similar_users = [user for user, _ in user_scores[1:top_n+1]]
+
+#         return similar_users
+
 class UserBasedCollaborativeFiltering:
     def __init__(self, json_data):
         self.data = pd.read_json(json_data)
+        self.data = self.data.set_index("user_id")
+        #   user_ids = self.data["user_id"]
+        # self.data = self.data.drop(["user_id"], axis = 1)
+        # self.data_copy = pd.read_json(json_data)
         self.user_similarity = cosine_similarity(self.data)
+        print(self.user_similarity)
 
     def get_similar_users(self, user_id, top_n=5):
-        user_scores = list(enumerate(self.user_similarity[user_id]))
+        user_idx = self.data.index.get_loc(user_id)
+        # print(user_idx)
+        user_scores = list(enumerate(self.user_similarity[user_idx]))
+        # print(user_scores)
         user_scores = sorted(user_scores, key=lambda x: x[1], reverse=True)
-        similar_users = [user for user, _ in user_scores[1:top_n+1]]
+        similar_users = [self.data.index[user] for user, _ in user_scores[1:top_n+1]]
 
         return similar_users
 
 
 def get_userid():
-    userid = 1
+    userid = '4c6376e4-a587-4ce7-b588-6a94ab103685'
     return userid
 
 
@@ -111,20 +134,42 @@ def image_classification(num_classes=NUM_CLASSES):
     with torch.no_grad():
         output = model(image)
         probabilities = torch.sigmoid(output)
-        predicted_labels = (probabilities >= 0.4).squeeze().tolist()
+        predicted_labels = (probabilities >= 0.35).squeeze().tolist()
 
     return predicted_labels
 
 
 if __name__ == "__main__":
-    json_data = data_ingestion()
-    filtering = UserBasedCollaborativeFiltering(json_data)
-    user_id = get_userid()
-    similar_users = filtering.get_similar_users(user_id)
+    # json_data = data_ingestion()
+    # filtering = UserBasedCollaborativeFiltering(json_data)
+    # user_id = get_userid()
+    # similar_users = filtering.get_similar_users(user_id)
 
+    # counter = 1
+    # for person in similar_users:
+    #     print(f"The person who is {counter} similar has userid: {person}")
+    #     counter += 1
+
+    # print(image_classification())
+    data = get_preferences()
+    data = json.dumps(data)
+    data = pd.read_json(data)
+    data = data.drop(["id"], axis = 1)
+    json_data = data.to_json()
+    
+    # filtering = UserBasedCollaborativeFiltering(json_data)
+    # user_id = get_userid()
+    # similar_users = filtering.get_similar_users(user_id)
+    # counter = 1
+    # for person in similar_users:
+    #     print(f"The person who is {counter} similar has userid: {person}")
+    #     counter += 1
+
+    cf = UserBasedCollaborativeFiltering(json_data)
+    similar_users = cf.get_similar_users(user_id='4c6376e4-a587-4ce7-b588-6a94ab103685', top_n=5)
     counter = 1
     for person in similar_users:
         print(f"The person who is {counter} similar has userid: {person}")
         counter += 1
 
-    print(image_classification())
+
