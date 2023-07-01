@@ -1,9 +1,8 @@
 "use client";
 
 import { FormEventHandler, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import register from "@/app/api/auth/register";
+import api from "@/app/api/route";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -17,7 +16,7 @@ export default function RegisterForm() {
 
     console.table({ email, password });
 
-    const registerResponse = await register({ name, bio, email, password });
+    const registerResponse = await api.auth.register({ name, bio, email, password });
     // if (!signInResponse) {
     //   toast.error("Sign in error.");
     //   return;

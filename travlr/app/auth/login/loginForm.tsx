@@ -2,7 +2,7 @@
 
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
-import login from "@/app/api/auth/login";
+import api from "@/app/api/route";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -13,8 +13,9 @@ export default function LoginForm() {
     e.preventDefault();
 
     console.table({ email, password });
+    api.auth.login({ email, password });
 
-    const loginResponse = await login({ email, password });
+    const loginResponse = await api.auth.login({ email, password });
 
     // if (!signInResponse) {
     //   toast.error("Sign in error.");

@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import backend from "../../backend";
 
 const handler = NextAuth({
   providers: [
@@ -39,6 +40,9 @@ const handler = NextAuth({
       },
     }),
   ],
+  events: {
+    signOut: async ({ session, token }) => {},
+  },
 });
 
 export { handler as GET, handler as POST };
