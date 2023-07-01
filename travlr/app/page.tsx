@@ -31,7 +31,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col items-center">
       <NavBar />
       <section
-        className="w-full h-[700px] py-36 flex flex-col justify-center items-center gap-8"
+        className="w-full h-screen py-36 flex flex-col justify-center items-center gap-8"
         style={{
           backgroundImage:
             "linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.3)), url(/mountain.svg)",

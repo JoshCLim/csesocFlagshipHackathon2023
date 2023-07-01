@@ -149,24 +149,26 @@ const NavBar = () => {
   const [emoji, setEmoji] = useState<string>("✈️");
   const user = useUser();
 
-  useEffect(() => {
-    const emojiInterval = setInterval(() => {
-      setEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+  //   const emojiInterval = setInterval(() => {
+  //     setEmoji(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
+  //   }, 1000);
+
+  //   // return () => {
+  //   //   clearInterval(emojiInterval);
+  //   // };
+  // }, []);
 
   return (
     <nav className="w-full fixed z-50 flex py-5 px-8 flex-row justify-between ">
       <NavLink url="/" label={emoji} key="home" />
       <div className="flex flex-row items-center justify-center gap-3">
         {!session && <NavLink url="/auth/login" label="Login" key="login" />}
-        {!session && (
-          <NavLink url="/auth/register" label="Register" key="register" />
-        )}
-        {!!session && !!session.user && (
+        {!session && <NavLink url="/auth/register" label="Register" key="register" />}
+        {!!session && !!session.user && user && (
           <div className="flex flex-row items-center justify-center gap-3">
             <div className="text-[#71bfff] text-xl py-3 px-6 border-[1px] border-transparent font-semibold">
-              Hey there, {session.user.name}
+              Hey there, <Link href={`/profile/${user.id}`}>{session.user.name}</Link>
             </div>
             <button
               className="text-white text-xl py-3 px-6 border-[1px] border-white transition-all rounded-full active:scale-95 hover:text-[#aaa] hover:border-[#aaa]"
@@ -191,5 +193,7 @@ const NavLink = ({ url, label }: { url: string; label: string }) => {
     </Link>
   );
 };
+
+const NavIcon = () => {};
 
 export default NavBar;

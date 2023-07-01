@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import api from "../api/api";
 
@@ -11,22 +10,17 @@ interface User {
   photo_id: string;
 }
 
-const useUser = () => {
+const useUserId = (id: string) => {
   const [user, setUser] = useState<User | null>(null);
-  const { data: session } = useSession();
   useEffect(() => {
     const getUserData = async () => {
-      if (!session) {
-        setUser(null);
-        return;
-      }
-      const user = await api.auth.getUser(session.user.email);
+      const user = await api.auth.getUser(id);
       setUser(user);
     };
     getUserData();
-  }, [session]);
+  }, [id]);
 
   return user;
 };
 
-export default useUser;
+export default useUserId;
