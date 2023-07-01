@@ -61,9 +61,9 @@ class FineTunedModel(nn.Module):
 # Call PyTorch Model 
 def image_classification(num_classes = NUM_CLASSES):
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),     # Resize to a common size
-        transforms.ToTensor(),              # Convert to tensor
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize the images
+        transforms.Resize((224, 224)),   
+        transforms.ToTensor(),           
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     
     model = FineTunedModel(num_classes)
@@ -71,7 +71,7 @@ def image_classification(num_classes = NUM_CLASSES):
 
     image = Image.open('./test/lunar_park.jpg').convert('RGB')
     image = transform(image)
-    image = image.unsqueeze(0)  # Add an extra dimension for batch size
+    image = image.unsqueeze(0)  
 
     # Make predictions
     with torch.no_grad():
