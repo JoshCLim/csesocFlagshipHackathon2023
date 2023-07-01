@@ -163,9 +163,10 @@ const NavBar = () => {
     <nav className="w-full fixed z-50 flex py-5 px-8 flex-row justify-between ">
       <div className="flex flex-row items-center justify-center gap-3">
         <NavLink url="/" label={emoji} key="home" />
-        {!!session && <NavLink url="gallery" label="Gallery" key="gallery" />}
-        {!!session && <NavLink url="explore" label="Explore" key="explore" />}
-        {!!session && <NavLink url="destinations" label="Destinations" key="destinations" />}
+        {!!session && <NavLink url="/gallery" label="Gallery" key="gallery" />}
+        {!!session && <NavLink url="/explore" label="Explore" key="explore" />}
+        {!!session && <NavLink url="/destinations" label="Destinations" key="destinations" />}
+        {!!session && <NavLink url="/favourites" label="Favourites" key="favourites" />}
       </div>
       <div className="flex flex-row items-center justify-center gap-3">
         {!session && <NavLink url="/auth/login" label="Login" key="login" />}
