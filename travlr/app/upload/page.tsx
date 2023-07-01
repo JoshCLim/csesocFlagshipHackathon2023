@@ -9,6 +9,7 @@ import NavBar from "../components/navbar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import backend from "../api/backend";
 
 export default function Settings() {
   const session = useSession();
@@ -32,6 +33,16 @@ export default function Settings() {
           onClientUploadComplete={(res) => {
             console.log("Files: ", res);
             if (!res) return;
+            res.forEach(async (file) => {
+              await backend({
+                route: "/photos",
+                method: "POST",
+                body: JSON.stringify({
+                  user_id: session?.data?.user.email,
+                  url: file.fileUrl,
+                }),
+              });
+            });
             setLastImageUploaded(res[0].fileUrl);
             toast.success("Upload Completed");
           }}
