@@ -55,16 +55,26 @@ export default async function Home() {
         {/* <div className="absolute top-0 left-0 w-full h-full bg-[#0053989f] backdrop-blur-[1px] flex flex-col items-center justify-center">
           <h1 className="text-8xl text-[#eee] font-extrabold text-center uppercase">Travlr</h1>
         </div> */}
-        <h1 className="text-8xl text-white font-extrabold text-center uppercase">Travlr</h1>
+        <h1 className="text-8xl text-white font-extrabold text-center uppercase">
+          Travlr
+        </h1>
         <p className="text-2xl text-white font-light">
-          <span className="text-[#8bbbff]">personalised</span> travel recommendations at your
-          fingertips
+          <span className="text-[#8bbbff]">personalised</span> travel
+          recommendations at your fingertips
         </p>
-        {!session && (
+        {!session ? (
           <div>
             <Link href={"/auth/register"}>
               <button className="uppercase text-white font-semibold py-4 px-7 rounded-full bg-sky-400">
                 Get started! <span className="ml-[5px]">✈️</span>
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <Link href={"/upload"}>
+              <button className="uppercase text-white font-semibold py-4 px-7 rounded-full bg-sky-400">
+                Begin your next journey! <span className="ml-[5px]">✈️</span>
               </button>
             </Link>
           </div>
