@@ -2,6 +2,13 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import requests
 import json
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision.transforms as transforms
+from torchvision import models
+from torch.utils.data import DataLoader, Dataset
+from PIL import Image
 
 '''
 This script is: 
@@ -10,6 +17,8 @@ This script is:
 3. Aggregating the value 
 4. Using recommendation system to get the people most similar to the person uploading the photos! 
 '''
+
+NUM_CLASSES = 9
 
 def data_ingestion():
     data = pd.DataFrame({'user_id': [0, 1, 2, 3, 1, 3],
@@ -37,9 +46,40 @@ def get_userid():
     userid=1
     return userid
 
+class FineTunedModel(nn.Module):
+    def __init__(self, num_classes):
+        super(FineTunedModel, self).__init__()
+        self.resnet = models.resnet18(pretrained=True)
+        for param in self.resnet.parameters():
+            param.requires_grad = False
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
+
+    def forward(self, x):
+        x = self.resnet(x)
+        return x
+
 # Call PyTorch Model 
-def image_classification():
-    return None
+def image_classification(num_classes = NUM_CLASSES):
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),     # Resize to a common size
+        transforms.ToTensor(),              # Convert to tensor
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize the images
+    ])
+    
+    model = FineTunedModel(num_classes)
+    model.load_state_dict(torch.load('model.pth'))
+
+    image = Image.open('./test/lunar_park.jpg').convert('RGB')
+    image = transform(image)
+    image = image.unsqueeze(0)  # Add an extra dimension for batch size
+
+    # Make predictions
+    with torch.no_grad():
+        output = model(image)
+        probabilities = torch.sigmoid(output)
+        predicted_labels = (probabilities >= 0.5).squeeze().tolist()
+    
+    return predicted_labels
 
 if __name__ == "__main__":
     json_data = data_ingestion()
@@ -51,6 +91,9 @@ if __name__ == "__main__":
     for person in similar_users: 
         print(f"The person who is {counter} similar has userid: {person}")
         counter += 1
+    
+    print(image_classification())
+    
     
     
      

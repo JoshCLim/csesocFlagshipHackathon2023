@@ -38,7 +38,6 @@ class UserBasedCollaborativeFiltering:
 if __name__ == "__main__":
     data = data_ingestion()
     json_data = data_to_json(data)
-    # Usage for UserBasedCollaborativeFiltering
     filtering = UserBasedCollaborativeFiltering(json_data)
     place_id = len(data) - 1
     similar_users = filtering.get_similar_users(place_id)
