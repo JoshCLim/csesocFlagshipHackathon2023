@@ -4,7 +4,7 @@ from ultralytics import YOLO
 
 class YOLOv6:
     '''
-    Using YOLOv6 to help us! 
+    Using the Object Detection Model YOLOv6 to help us get the detection results. 
     '''
     def __init__(self, model_type = "small"):
         self.model = None
