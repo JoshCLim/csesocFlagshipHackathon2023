@@ -1,8 +1,12 @@
 "use client";
 
+import "@uploadthing/react/styles.css";
+
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/app/api/route";
+import { Toaster, toast } from "react-hot-toast";
+import { UploadButton } from "../../utils/uploadthing";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -10,26 +14,32 @@ export default function RegisterForm() {
   const [bio, setBio] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
   const submitHandler: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    console.table({ email, password });
+    console.table({ name, bio, email, password, photoUrl });
 
-    const registerResponse = await api.auth.register({ name, bio, email, password });
-    // if (!signInResponse) {
-    //   toast.error("Sign in error.");
-    //   return;
-    // } else if (signInResponse.error) {
-    //   toast.error(signInResponse.error);
-    //   return;
-    // }
+    if (!photoUrl) {
+      toast.error("Please upload a profile picture.");
+      return;
+    }
 
-    // // if login successful redirect to home page
+    const registerResponse = await api.auth.register({ name, bio, email, password, photoUrl });
+    if (registerResponse.ok) {
+      toast.success(registerResponse.message);
+    } else {
+      toast.error(registerResponse.message);
+      return;
+    }
+
+    // if login successful redirect to home page
     router.push("/");
   };
   return (
     <form className="flex flex-col gap-7 md:min-w-[500px]" onSubmit={submitHandler}>
+      <Toaster />
       <h1 className="text-5xl font-bold">Begin your journey with us.</h1>
       <div className="flex flex-col justify-start items-start gap-2 w-full">
         <label className="">Name</label>
@@ -72,6 +82,31 @@ export default function RegisterForm() {
           value={password}
           formNoValidate
         />
+      </div>
+      <div className="flex flex-col justify-start items-start gap-2 w-full">
+        <label className="">Profile Photo</label>
+        <div className="flex flex-row gap-10">
+          <UploadButton
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+              console.log("Files: ", res);
+              if (!res) {
+                toast.error("Upload Failed");
+                return;
+              }
+              setPhotoUrl(res[0].fileUrl);
+              toast.success("Upload Completed");
+            }}
+            onUploadError={(error: Error) => {
+              toast.error(`ERROR! ${error.message}`);
+            }}
+          />
+          {!!photoUrl && (
+            <a href={photoUrl} className="hover:underline transition-all max-w-[400px] break-all">
+              {photoUrl}
+            </a>
+          )}
+        </div>
       </div>
       <div className="flex flex-col justify-start items-start gap-2 w-full">
         <input

@@ -3,6 +3,8 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import api from "../api/route";
+import useUser from "../hooks/useUser";
 
 const EMOJIS = [
   "🚣",
@@ -146,6 +148,19 @@ const EMOJIS = [
 const NavBar = () => {
   const { data: session } = useSession();
   const [emoji, setEmoji] = useState<string>("✈️");
+
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     if (!session) {
+  //       console.log("ahhh");
+  //       return null;
+  //     }
+  //     const user = await api.auth.getUser(session.user.email);
+  //     console.log(user);
+  //   };
+  //   getUserData();
+  // }, [session]);
+  const user = useUser();
 
   useEffect(() => {
     const emojiInterval = setInterval(() => {

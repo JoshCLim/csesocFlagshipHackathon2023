@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import backend from "../../backend";
+
+const BACKEND_URL = process.env.BACKEND_URL;
 
 const handler = NextAuth({
   providers: [
@@ -22,18 +23,28 @@ const handler = NextAuth({
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        return { email: "bodu@gmail.com", name: "Bodu", id: 1 };
+        // return { email: "bodu@gmail.com", name: "Bodu", id: 1 };
 
-        const res = await fetch("/your/endpoint", {
+        const res = await fetch(`${BACKEND_URL}/auth/login`, {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
         });
         const user = await res.json();
 
+        console.log("USER");
+        console.log(user[0]);
+
         // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+        if (res.ok && user && user[0]) {
+          const sessionObject = {
+            name: user[0].name,
+            email: user[0].id,
+            id: user[0].id,
+            image: user[0].photo_id,
+          };
+          console.log(sessionObject);
+          return sessionObject;
         }
         // Return null if user data could not be retrieved
         return null;

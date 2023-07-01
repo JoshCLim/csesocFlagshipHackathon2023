@@ -5,7 +5,9 @@ import { redirect } from "next/navigation";
 
 export default async function Register() {
   const session = await getServerSession();
-  if (!!session) redirect("/");
+  console.log("alskdjnsald");
+  console.log(session);
+  // if (!!session) redirect("/");
 
   return (
     <main className="flex w-full h-screen flex-col items-center">

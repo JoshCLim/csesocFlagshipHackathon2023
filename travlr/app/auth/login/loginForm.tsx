@@ -3,6 +3,7 @@
 import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/app/api/route";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -17,19 +18,21 @@ export default function LoginForm() {
 
     const loginResponse = await api.auth.login({ email, password });
 
-    // if (!signInResponse) {
-    //   toast.error("Sign in error.");
-    //   return;
-    // } else if (signInResponse.error) {
-    //   toast.error(signInResponse.error);
-    //   return;
-    // }
+    if (!loginResponse) {
+      toast.error("Sign in error.");
+      return;
+    } else if (loginResponse.error) {
+      toast.error("Incorrect email or password.");
+      return;
+    }
 
-    // // if login successful redirect to home page
+    // if login successful redirect to home page
     router.push("/");
   };
+
   return (
     <form className="flex flex-col gap-7 md:min-w-[500px]" onSubmit={submitHandler}>
+      <Toaster />
       <h1 className="text-5xl font-bold">Login</h1>
       <div className="flex flex-col justify-start items-start gap-2 w-full">
         <label className="">Email</label>

@@ -1,4 +1,5 @@
-const BACKEND_URL = process.env.BACKEND_URL;
+// const BACKEND_URL = process.env.BACKEND_URL;
+const BACKEND_URL = "http://localhost:8000";
 
 interface FetchArguments {
   route: string;
@@ -19,8 +20,15 @@ const backend = async ({
 FetchArguments) => {
   const headers: HeadersInit = { "Content-Type": contentType };
   //   if (authRequired) headers["Authorization"] = `Bearer ${accessToken}`;
+  console.log(`url is ${BACKEND_URL}`);
 
-  return await fetch(`${BACKEND_URL}${route}`, { method, headers, body });
+  try {
+    const res = await fetch(`${BACKEND_URL}${route}`, { method, headers, body });
+    return res;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 };
 
 export default backend;
