@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import api from "@/app/api/api";
 import { Toaster, toast } from "react-hot-toast";
 import { UploadButton } from "../../utils/uploadthing";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function RegisterForm() {
         <input
           className="py-3 p-5 rounded-lg border-[1px] outline-none w-full focus:border-[#000] transition-all"
           type="text"
-          placeholder="Dixon Cider"
+          placeholder="John Doe"
           onChange={(e) => setName(e.target.value)}
           value={name}
           formNoValidate
@@ -116,6 +117,13 @@ export default function RegisterForm() {
           formNoValidate
         />
       </div>
+      <p>
+        Already have an account?{" "}
+        <Link className="text-[#6fd1fe] underline" href={"/auth/login"}>
+          Login
+        </Link>{" "}
+        instead.
+      </p>
     </form>
   );
 }

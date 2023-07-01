@@ -4,6 +4,7 @@ import { FormEventHandler, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/app/api/api";
 import { Toaster, toast } from "react-hot-toast";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -64,6 +65,13 @@ export default function LoginForm() {
           formNoValidate
         />
       </div>
+      <p>
+        Don&apos;t have an account?{" "}
+        <Link className="text-[#6fd1fe] underline" href={"/auth/register"}>
+          Register
+        </Link>{" "}
+        instead.
+      </p>
     </form>
   );
 }
