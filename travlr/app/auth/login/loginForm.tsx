@@ -13,8 +13,7 @@ export default function LoginForm() {
   const submitHandler: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    console.table({ email, password });
-    api.auth.login({ email, password });
+    console.log({ email, password });
 
     const loginResponse = await api.auth.login({ email, password });
 
@@ -23,6 +22,7 @@ export default function LoginForm() {
       return;
     } else if (loginResponse.error) {
       toast.error("Incorrect email or password.");
+      console.log(loginResponse.error);
       return;
     }
 
