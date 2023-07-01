@@ -168,7 +168,7 @@ const NavBar = () => {
         {!!session && !!session.user && user && (
           <div className="flex flex-row items-center justify-center gap-3">
             <div className="text-[#71bfff] text-xl py-3 px-6 border-[1px] border-transparent font-semibold">
-              Hey there, <Link href={`/profile/${user.id}`}>{session.user.name}</Link>
+              Hey there, {session.user.name}
             </div>
             <button
               className="text-white text-xl py-3 px-6 border-[1px] border-white transition-all rounded-full active:scale-95 hover:text-[#aaa] hover:border-[#aaa]"
