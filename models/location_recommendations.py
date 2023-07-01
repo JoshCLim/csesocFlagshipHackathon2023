@@ -26,7 +26,9 @@ def data_ingestion():
         'tourist_hotspot': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         'cozy': [0, 0, 1, 1, 0, 0, 0, 1, 1, 0],
         'family': [1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
-        'wildlife': [0, 1, 0, 1, 0, 0, 1, 1, 0, 1]
+        'wildlife': [0, 1, 0, 1, 0, 0, 1, 1, 0, 1], 
+        'near_cbd': [1, 0, 1, 1, 1, 1, 0, 0, 0, 0], 
+        'disabled_accessibility': [1, 1, 1, 1, 0, 1, 1, 0, 0, 0]
     }
     data = pd.DataFrame(data)
     return data

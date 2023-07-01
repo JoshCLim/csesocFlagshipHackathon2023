@@ -18,8 +18,7 @@ This script is:
 4. Using recommendation system to get the people most similar to the person uploading the photos! 
 '''
 
-NUM_CLASSES = 9
-
+NUM_CLASSES = 11
 
 def get_preferences():
     url = "http://localhost:8000/preferences"
@@ -39,6 +38,7 @@ def data_ingestion():
                          'item3': [3, 5, 4, 2, 3, 3],
                          'item4': [1, 2, 5, 1, 3, 3]})
     data = data.groupby('user_id').mean()
+    # json_data = get_preferences()
     json_data = data.to_json()
     return json_data
 
@@ -61,13 +61,30 @@ def get_userid():
     return userid
 
 
+# class FineTunedModel(nn.Module):
+#     def __init__(self, num_classes):
+#         super(FineTunedModel, self).__init__()
+#         self.resnet = models.resnet18(pretrained=True)
+#         for param in self.resnet.parameters():
+#             param.requires_grad = False
+#         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
+
+#     def forward(self, x):
+#         x = self.resnet(x)
+#         return x
+
 class FineTunedModel(nn.Module):
     def __init__(self, num_classes):
         super(FineTunedModel, self).__init__()
         self.resnet = models.resnet18(pretrained=True)
         for param in self.resnet.parameters():
             param.requires_grad = False
-        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
+        self.resnet.fc = nn.Sequential(
+            nn.Linear(self.resnet.fc.in_features, 512),
+            nn.ReLU(),
+            nn.Dropout(0.5),  # Dropout layer with 50% probability
+            nn.Linear(512, num_classes)
+        )
 
     def forward(self, x):
         x = self.resnet(x)
@@ -84,7 +101,7 @@ def image_classification(num_classes=NUM_CLASSES):
     ])
 
     model = FineTunedModel(num_classes)
-    model.load_state_dict(torch.load('model.pth'))
+    model.load_state_dict(torch.load('model_learning_curve.pth'))
 
     image = Image.open('./test/lunar_park.jpg').convert('RGB')
     image = transform(image)
@@ -94,7 +111,7 @@ def image_classification(num_classes=NUM_CLASSES):
     with torch.no_grad():
         output = model(image)
         probabilities = torch.sigmoid(output)
-        predicted_labels = (probabilities >= 0.5).squeeze().tolist()
+        predicted_labels = (probabilities >= 0.4).squeeze().tolist()
 
     return predicted_labels
 
