@@ -156,17 +156,24 @@ const LocationCard = ({ location }: { location: Location }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between flex-wrap gap-4 max-w-[200px]">
-        {profilePics.map((user) => {
-          if (user?.photo_id)
-            return (
-              <Link href={`/profile/${user.id}`}>
-                <img key={user?.photo_id} src={user?.photo_id} className="w-20 h-20 rounded-full" />
-              </Link>
-              //   <p key={url}>{url}</p>
-            );
-          return <></>;
-        })}
+      <div className="max-w-[200px] py-4">
+        <p className="mb-3">People interested in {location.name}</p>
+        <div className="flex flex-row items-center justify-between flex-wrap gap-4 ">
+          {profilePics.map((user) => {
+            if (user?.photo_id)
+              return (
+                <Link href={`/profile/${user.id}`}>
+                  <img
+                    key={user?.photo_id}
+                    src={user?.photo_id}
+                    className="w-20 h-20 rounded-full"
+                  />
+                </Link>
+                //   <p key={url}>{url}</p>
+              );
+            return <></>;
+          })}
+        </div>
       </div>
     </div>
   );
