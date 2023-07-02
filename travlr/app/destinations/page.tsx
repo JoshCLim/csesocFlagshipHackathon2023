@@ -4,11 +4,12 @@ import NavBar from "../components/navbar";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import backend from "../api/backend";
 import useUser from "../hooks/useUser";
-import { Close, Done, Star } from "@mui/icons-material";
+import Star from "@mui/icons-material/Star";
 
 interface Recommendation {
-  user_id: string;
-  location_ids: string[];
+  // user_id: string;
+  // location_ids: string[];
+  id: string;
 }
 
 interface Location {
@@ -18,10 +19,18 @@ interface Location {
   coordinates: { x: number; y: number };
 }
 
-const SAMPLE_RECOMMENDATION: Recommendation = {
-  user_id: "81e3d2e1-6710-452c-9b16-845fc5a4b987",
-  location_ids: ["caa6946e-2178-47a0-a9e1-528a551441be", "67f1740d-04ce-4e7a-a107-a0400222b13e"],
-};
+const SAMPLE_RECOMMENDATION: Recommendation[] = [
+  {
+    id: "caa6946e-2178-47a0-a9e1-528a551441be",
+  },
+  {
+    id: "67f1740d-04ce-4e7a-a107-a0400222b13e",
+  },
+];
+// {
+//   user_id: "81e3d2e1-6710-452c-9b16-845fc5a4b987",
+//   location_ids: ["caa6946e-2178-47a0-a9e1-528a551441be", "67f1740d-04ce-4e7a-a107-a0400222b13e"],
+// };
 
 export default function Recommendation() {
   const user = useUser();
@@ -37,9 +46,11 @@ export default function Recommendation() {
         route: `/recommendations/user/${user.id}`,
         method: "GET",
       });
+      console.log(res);
       if (!res || !res.ok) return SAMPLE_RECOMMENDATION;
       const data = await res.json();
-      return data as Recommendation;
+      console.log(data);
+      return data as Recommendation[];
     };
     const getLocation = async (id: string) => {
       const res = await backend({
@@ -52,7 +63,7 @@ export default function Recommendation() {
     };
     getRecommendations()
       .then(async (res) => {
-        const a = Promise.all(res.location_ids.map(async (id) => await getLocation(id)));
+        const a = Promise.all(res.map(async (id) => await getLocation(id.id)));
         return a;
       })
       .then((res) =>

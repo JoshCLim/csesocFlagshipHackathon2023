@@ -1,5 +1,5 @@
 // const BACKEND_URL = process.env.BACKEND_URL;
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = "http://localhost:4000";
 
 interface FetchArguments {
   route: string;
